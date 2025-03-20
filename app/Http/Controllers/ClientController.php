@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -12,6 +13,7 @@ class ClientController extends Controller
     public function index()
     {
         // listar
+        return response()->json(Client::all(),200);
     }
 
     /**
