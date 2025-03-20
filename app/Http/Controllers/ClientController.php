@@ -80,6 +80,15 @@ class ClientController extends Controller
      */
     public function destroy(string $id)
     {
-        // excluir
+        $client = Client::find($id);
+
+        if ($client) {
+            $client->delete();
+            return response()->json([
+                'message' => 'Cliente excluído com sucesso'], 200);
+        } else {
+            return response()->json([
+                'message' => 'Cliente não encontrado'], 404);
+        }
     }
 }
