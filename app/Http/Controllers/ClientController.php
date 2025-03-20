@@ -12,7 +12,6 @@ class ClientController extends Controller
      */
     public function index()
     {
-        // listar
         return response()->json(Client::all(),200);
     }
 
@@ -41,7 +40,14 @@ class ClientController extends Controller
      */
     public function show(string $id)
     {
-        // mostrar 1 cliente específico
+        $client = Client::find($id);
+
+        if ($client) {
+            return response()->json($client, 200);
+        } else {
+            return response()->json([
+                'message' => 'Cliente não encontrado'], 404);
+        }
     }
 
     /**
