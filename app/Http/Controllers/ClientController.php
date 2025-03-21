@@ -13,6 +13,10 @@ class ClientController extends Controller
      */
     public function index()
     {
+        if(!auth()->user()->tokenCan('clients:list')) {
+            return ApiResponse::error('Acesso negado', 401);
+        }
+
         return ApiResponse::success(Client::all());
     }
 
@@ -38,12 +42,16 @@ class ClientController extends Controller
      */
     public function show(string $id)
     {
+        if(!auth()->user()->tokenCan('clients:detail')) {
+            return ApiResponse::error('Acesso negado', 401);    
+        }
+        
         $client = Client::find($id);
 
         if ($client) {
             return ApiResponse::success($client);
         } else {
-            return ApiResponse::error('Cliente não encontrado', 404);
+            return ApiResponse::error('Cliente não encontrado', 404);
         }
     }
 
@@ -64,7 +72,7 @@ class ClientController extends Controller
             $client->update($request->all());
             return ApiResponse::success($client);
         } else {
-            return ApiResponse::error('Cliente não encontrado');
+            return ApiResponse::error('Cliente não encontrado');
         }
     }
 
@@ -79,7 +87,7 @@ class ClientController extends Controller
             $client->delete();
             return ApiResponse::success('Cliente deletado com sucesso');
         } else {
-            return ApiResponse::error('Cliente não encontrado');
+            return ApiResponse::error('Cliente não encontrado');
         }
     }
 }
