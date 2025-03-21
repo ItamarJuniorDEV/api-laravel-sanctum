@@ -13,10 +13,10 @@ class ClientController extends Controller
      */
     public function index()
     {
-        if(!auth()->user()->tokenCan('clients:list')) {
-            return ApiResponse::error('Acesso negado', 401);
-        }
-
+        // if(!auth()->user()->tokenCan('clients:list')) {
+        //    return ApiResponse::error('Acesso negado', 401);
+        // }
+        //
         return ApiResponse::success(Client::all());
     }
 
