@@ -2,36 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
+use App\Http\Requests\StoreClientRequest;
+use App\Http\Requests\UpdateClientRequest;
+use App\Http\Resources\ClientResource;
 use App\Services\ApiResponse;
-use Illuminate\Http\Request;
+use App\Services\ClientService;
 
 class ClientController extends Controller
 {
+    public function __construct(private ClientService $service)
+    {
+    }
+
     public function index()
     {
         if (!auth()->user()->tokenCan('clients:list')) {
             return ApiResponse::error('Acesso negado', 401);
         }
 
-        return ApiResponse::success(Client::all());
+        $clients = $this->service->getAll();
+
+        return ApiResponse::success(ClientResource::collection($clients)->toArray(request()));
     }
 
-    public function store(Request $request)
+    public function store(StoreClientRequest $request)
     {
         if (!auth()->user()->tokenCan('clients:detail')) {
             return ApiResponse::error('Acesso negado', 401);
         }
 
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:clients',
-            'phone' => 'required'
-        ]);
+        $client = $this->service->create($request->validated());
 
-        $client = Client::create($request->all());
-
-        return ApiResponse::success($client);
+        return ApiResponse::success((new ClientResource($client))->toArray(request()));
     }
 
     public function show($id)
@@ -40,36 +42,28 @@ class ClientController extends Controller
             return ApiResponse::error('Acesso negado', 401);
         }
 
-        $client = Client::find($id);
+        $client = $this->service->getById($id);
 
         if (!$client) {
             return ApiResponse::error('Cliente não encontrado', 404);
         }
 
-        return ApiResponse::success($client);
+        return ApiResponse::success((new ClientResource($client))->toArray(request()));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateClientRequest $request, $id)
     {
         if (!auth()->user()->tokenCan('clients:detail')) {
             return ApiResponse::error('Acesso negado', 401);
         }
 
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:clients,email,'.$id,
-            'phone' => 'required'
-        ]);
-
-        $client = Client::find($id);
+        $client = $this->service->update($id, $request->validated());
 
         if (!$client) {
             return ApiResponse::error('Cliente não encontrado', 404);
         }
 
-        $client->update($request->all());
-
-        return ApiResponse::success($client);
+        return ApiResponse::success((new ClientResource($client))->toArray(request()));
     }
 
     public function destroy($id)
@@ -78,13 +72,11 @@ class ClientController extends Controller
             return ApiResponse::error('Acesso negado', 401);
         }
 
-        $client = Client::find($id);
+        $deleted = $this->service->delete($id);
 
-        if (!$client) {
+        if (!$deleted) {
             return ApiResponse::error('Cliente não encontrado', 404);
         }
-
-        $client->delete();
 
         return ApiResponse::success('Cliente deletado com sucesso');
     }
