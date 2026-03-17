@@ -2,15 +2,15 @@
 
 namespace App\Services;
 
-use App\Repositories\ClientRepository;
+use App\Repositories\ClientRepositoryInterface;
 
 class ClientService
 {
-    public function __construct(private ClientRepository $repository) {}
+    public function __construct(private ClientRepositoryInterface $repository) {}
 
-    public function getAll()
+    public function getAll(int $perPage = 15)
     {
-        return $this->repository->findAll();
+        return $this->repository->findAll($perPage);
     }
 
     public function getById($id)
@@ -18,12 +18,12 @@ class ClientService
         return $this->repository->findById($id);
     }
 
-    public function create($data)
+    public function create(array $data)
     {
         return $this->repository->create($data);
     }
 
-    public function update($id, $data)
+    public function update($id, array $data)
     {
         $client = $this->repository->findById($id);
 
@@ -39,7 +39,7 @@ class ClientService
         $client = $this->repository->findById($id);
 
         if (! $client) {
-            return false;
+            return null;
         }
 
         $this->repository->delete($client);

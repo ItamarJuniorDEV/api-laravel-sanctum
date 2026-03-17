@@ -4,11 +4,11 @@ namespace App\Repositories;
 
 use App\Models\Client;
 
-class ClientRepository
+class ClientRepository implements ClientRepositoryInterface
 {
-    public function findAll()
+    public function findAll(int $perPage = 15)
     {
-        return Client::all();
+        return Client::paginate($perPage);
     }
 
     public function findById($id)
@@ -16,19 +16,19 @@ class ClientRepository
         return Client::find($id);
     }
 
-    public function create($data)
+    public function create(array $data)
     {
         return Client::create($data);
     }
 
-    public function update(Client $client, $data)
+    public function update(Client $client, array $data)
     {
         $client->update($data);
 
         return $client;
     }
 
-    public function delete(Client $client)
+    public function delete(Client $client): void
     {
         $client->delete();
     }
