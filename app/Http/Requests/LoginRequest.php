@@ -16,8 +16,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ];
     }
 
@@ -33,8 +33,8 @@ class LoginRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'status_code' => 422,
-            'message' => 'Dados inválidos',
+            'success' => false,
+            'message' => 'Dados inválidos!',
             'errors' => $validator->errors(),
         ], 422));
     }

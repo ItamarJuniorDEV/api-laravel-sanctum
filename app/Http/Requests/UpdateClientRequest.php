@@ -16,9 +16,9 @@ class UpdateClientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:clients,email,'.$this->route('client'),
-            'phone' => 'required|string|max:20',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:clients,email,'.$this->route('client')],
+            'phone' => ['required', 'string', 'max:20'],
         ];
     }
 
@@ -36,8 +36,8 @@ class UpdateClientRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'status_code' => 422,
-            'message' => 'Dados inválidos',
+            'success' => false,
+            'message' => 'Dados inválidos!',
             'errors' => $validator->errors(),
         ], 422));
     }
