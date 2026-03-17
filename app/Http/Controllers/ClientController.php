@@ -20,7 +20,12 @@ class ClientController extends Controller
 
         $clients = $this->service->getAll();
 
-        return ApiResponse::success(ClientResource::collection($clients)->toArray(request()));
+        return ApiResponse::success([
+            'clients' => ClientResource::collection($clients->items())->toArray(request()),
+            'total' => $clients->total(),
+            'current_page' => $clients->currentPage(),
+            'last_page' => $clients->lastPage(),
+        ]);
     }
 
     public function store(StoreClientRequest $request)
