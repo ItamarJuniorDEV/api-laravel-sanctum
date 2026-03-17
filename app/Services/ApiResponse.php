@@ -6,27 +6,27 @@ use Illuminate\Http\JsonResponse;
 
 class ApiResponse
 {
-    public static function success($data): JsonResponse
+    public static function success($data, string $message = 'Operação realizada com sucesso!'): JsonResponse
     {
         return response()->json([
-            'status_code' => 200,
-            'message' => 'Success',
+            'success' => true,
+            'message' => $message,
             'data' => $data,
         ], 200);
     }
 
-    public static function error($message, $statusCode = 500): JsonResponse
+    public static function error(string $message, int $statusCode = 500): JsonResponse
     {
         return response()->json([
-            'status_code' => $statusCode,
+            'success' => false,
             'message' => $message,
         ], $statusCode);
     }
 
-    public static function unauthorized($message): JsonResponse
+    public static function unauthorized(string $message): JsonResponse
     {
         return response()->json([
-            'status_code' => 401,
+            'success' => false,
             'message' => $message,
         ], 401);
     }
