@@ -11,7 +11,7 @@ class ApiResponse
         return response()->json([
             'status_code' => 200,
             'message' => 'Success',
-            'data' => $data
+            'data' => $data,
         ], 200);
     }
 

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Services\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Services\ApiResponse;
 
 class AuthController extends Controller
 {
@@ -13,7 +13,7 @@ class AuthController extends Controller
     {
         $credentials = $request->only(['email', 'password']);
 
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             return ApiResponse::unauthorized('Credenciais inválidas');
         }
 
@@ -24,7 +24,7 @@ class AuthController extends Controller
         return ApiResponse::success([
             'user' => $user->name,
             'email' => $user->email,
-            'token' => $token
+            'token' => $token,
         ]);
     }
 

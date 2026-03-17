@@ -5,7 +5,7 @@ use App\Http\Controllers\ClientController;
 use App\Services\ApiResponse;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/status', function() {
+Route::get('/status', function () {
     return ApiResponse::success('API rodando');
 })->middleware('auth:sanctum');
 

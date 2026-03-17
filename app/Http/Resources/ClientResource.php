@@ -13,7 +13,7 @@ class ClientResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
-            'created_at' => $this->created_at
+            'created_at' => $this->created_at,
         ];
     }
 }

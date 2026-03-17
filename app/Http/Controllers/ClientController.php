@@ -10,13 +10,11 @@ use App\Services\ClientService;
 
 class ClientController extends Controller
 {
-    public function __construct(private ClientService $service)
-    {
-    }
+    public function __construct(private ClientService $service) {}
 
     public function index()
     {
-        if (!auth()->user()->tokenCan('clients:list')) {
+        if (! auth()->user()->tokenCan('clients:list')) {
             return ApiResponse::error('Acesso negado', 401);
         }
 
@@ -27,7 +25,7 @@ class ClientController extends Controller
 
     public function store(StoreClientRequest $request)
     {
-        if (!auth()->user()->tokenCan('clients:detail')) {
+        if (! auth()->user()->tokenCan('clients:detail')) {
             return ApiResponse::error('Acesso negado', 401);
         }
 
@@ -38,13 +36,13 @@ class ClientController extends Controller
 
     public function show($id)
     {
-        if (!auth()->user()->tokenCan('clients:detail')) {
+        if (! auth()->user()->tokenCan('clients:detail')) {
             return ApiResponse::error('Acesso negado', 401);
         }
 
         $client = $this->service->getById($id);
 
-        if (!$client) {
+        if (! $client) {
             return ApiResponse::error('Cliente não encontrado', 404);
         }
 
@@ -53,13 +51,13 @@ class ClientController extends Controller
 
     public function update(UpdateClientRequest $request, $id)
     {
-        if (!auth()->user()->tokenCan('clients:detail')) {
+        if (! auth()->user()->tokenCan('clients:detail')) {
             return ApiResponse::error('Acesso negado', 401);
         }
 
         $client = $this->service->update($id, $request->validated());
 
-        if (!$client) {
+        if (! $client) {
             return ApiResponse::error('Cliente não encontrado', 404);
         }
 
@@ -68,13 +66,13 @@ class ClientController extends Controller
 
     public function destroy($id)
     {
-        if (!auth()->user()->tokenCan('clients:detail')) {
+        if (! auth()->user()->tokenCan('clients:detail')) {
             return ApiResponse::error('Acesso negado', 401);
         }
 
         $deleted = $this->service->delete($id);
 
-        if (!$deleted) {
+        if (! $deleted) {
             return ApiResponse::error('Cliente não encontrado', 404);
         }
 

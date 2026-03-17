@@ -20,7 +20,7 @@ class ExampleTest extends TestCase
     {
         $response = $this->postJson('/api/login', [
             'email' => 'naoexiste@teste.com',
-            'password' => 'senhaerrada'
+            'password' => 'senhaerrada',
         ]);
 
         $response->assertStatus(401);

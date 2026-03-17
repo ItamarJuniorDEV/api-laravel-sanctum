@@ -6,9 +6,7 @@ use App\Repositories\ClientRepository;
 
 class ClientService
 {
-    public function __construct(private ClientRepository $repository)
-    {
-    }
+    public function __construct(private ClientRepository $repository) {}
 
     public function getAll()
     {
@@ -29,7 +27,7 @@ class ClientService
     {
         $client = $this->repository->findById($id);
 
-        if (!$client) {
+        if (! $client) {
             return null;
         }
 
@@ -40,7 +38,7 @@ class ClientService
     {
         $client = $this->repository->findById($id);
 
-        if (!$client) {
+        if (! $client) {
             return false;
         }
 

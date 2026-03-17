@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Client extends Model
 {
     use HasFactory;
-    
+
     /**
      * Os atributos que são atribuíveis em massa.
      *
@@ -17,6 +17,6 @@ class Client extends Model
     protected $fillable = [
         'name',
         'email',
-        'phone'
+        'phone',
     ];
 }

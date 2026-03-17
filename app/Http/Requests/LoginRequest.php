@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginRequest extends FormRequest
@@ -17,7 +17,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ];
     }
 
@@ -26,7 +26,7 @@ class LoginRequest extends FormRequest
         return [
             'email.required' => 'O e-mail é obrigatório',
             'email.email' => 'Digite um e-mail válido',
-            'password.required' => 'A senha é obrigatória'
+            'password.required' => 'A senha é obrigatória',
         ];
     }
 
@@ -35,7 +35,7 @@ class LoginRequest extends FormRequest
         throw new HttpResponseException(response()->json([
             'status_code' => 422,
             'message' => 'Dados inválidos',
-            'errors' => $validator->errors()
+            'errors' => $validator->errors(),
         ], 422));
     }
 }

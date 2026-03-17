@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreClientRequest extends FormRequest
@@ -18,7 +18,7 @@ class StoreClientRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:clients,email',
-            'phone' => 'required|string|max:20'
+            'phone' => 'required|string|max:20',
         ];
     }
 
@@ -29,7 +29,7 @@ class StoreClientRequest extends FormRequest
             'email.required' => 'O e-mail é obrigatório',
             'email.email' => 'Digite um e-mail válido',
             'email.unique' => 'Este e-mail já está cadastrado',
-            'phone.required' => 'O telefone é obrigatório'
+            'phone.required' => 'O telefone é obrigatório',
         ];
     }
 
@@ -38,7 +38,7 @@ class StoreClientRequest extends FormRequest
         throw new HttpResponseException(response()->json([
             'status_code' => 422,
             'message' => 'Dados inválidos',
-            'errors' => $validator->errors()
+            'errors' => $validator->errors(),
         ], 422));
     }
 }
