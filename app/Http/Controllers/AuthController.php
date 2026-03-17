@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Services\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 class AuthController extends Controller
 {
@@ -13,25 +14,39 @@ class AuthController extends Controller
     {
         $credentials = $request->only(['email', 'password']);
 
-        if (! Auth::attempt($credentials)) {
-            return ApiResponse::unauthorized('Credenciais inválidas');
+        try {
+            if (! Auth::attempt($credentials)) {
+                return ApiResponse::unauthorized('Credenciais inválidas!');
+            }
+
+            $user = Auth::user();
+
+            $token = $user->createToken($user->name, ['clients:list', 'clients:detail'], now()->addHour())->plainTextToken;
+
+            return ApiResponse::success([
+                'user' => $user->name,
+                'email' => $user->email,
+                'token' => $token,
+            ], 'Login realizado com sucesso!');
+
+        } catch (Throwable $e) {
+            report($e);
+
+            return ApiResponse::error('Erro interno no servidor ao tentar fazer login!');
         }
-
-        $user = Auth::user();
-
-        $token = $user->createToken($user->name, ['clients:list', 'clients:detail'], now()->addHour())->plainTextToken;
-
-        return ApiResponse::success([
-            'user' => $user->name,
-            'email' => $user->email,
-            'token' => $token,
-        ]);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        try {
+            $request->user()->tokens()->delete();
 
-        return ApiResponse::success('Logout realizado com sucesso');
+            return ApiResponse::success(null, 'Logout realizado com sucesso!');
+
+        } catch (Throwable $e) {
+            report($e);
+
+            return ApiResponse::error('Erro interno no servidor ao tentar fazer logout!');
+        }
     }
 }
